@@ -1,8 +1,13 @@
 const mongoose = require('mongoose')
 
-const recipe = mongoose.Schema({
-    
-    
-})
-
-module.exports = mongoose.model("Recipe", recipe, "recipes") 
+module.exports = mongoose.model("Recipe", mongoose.Schema({
+    author_username: String,
+    recipe: {
+        name: String,
+        description: String,
+        image: Buffer,
+        tags: Array,
+        average_rate: Number,
+        rates_number: Number
+    }
+}), "recipes") 
