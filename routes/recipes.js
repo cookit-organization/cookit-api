@@ -1,5 +1,5 @@
 const fs = require('fs');
-const recipeSchema = require('../schemas/recipe')
+const recipeSchema = require('../schemes/recipe')
 
 // var recipe = new recipeSchema
 // recipe.img.data = fs.readFileSync(imgPath)

@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 module.exports = mongoose.model("User", mongoose.Schema({
     profile: {
         name: String,
-        image: Buffer,
+        // image: Buffer,
         bio: String,
         rate: Number
     },
