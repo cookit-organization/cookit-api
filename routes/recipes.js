@@ -1,11 +1,9 @@
 const mongoose = require('mongoose')
-const recipeSchema = require('../schemes/recipeScheme')
+const Recipe = require('../schemes/recipe')
 
 function newRecipe(req, res){
 
     //RSA for username 
-
-    let Recipe = mongoose.model("Recipe", recipeSchema, req.query.author_username)
 
     new Recipe({
         author_username: req.query.author_username,
@@ -15,10 +13,10 @@ function newRecipe(req, res){
             description: req.query.description,
             image: null,
             tags: req.query.tags,
-            components: {'meat':'lol','shaha':'gjgj','meat':'lol','shaha':'gjgj','meat':'lol','shaha':'gjgj'},
             meal_time: req.query.meal_time,
-            average_rate: [],
-            rates_number: []
+            components: {'meat':'lol','shaha':'gjgj','meat':'lol','shaha':'gjgj','meat':'lol','shaha':'gjgj'},
+            average_rate: 0,
+            rates_number: 0
         }
     }).save()
     .then((result) => {
@@ -32,19 +30,26 @@ function updateRecipe(req, res){}
 
 function deleteRecipe(req, res){}
 
-function randomRecipes(req, res){}
+function randomRecipes(req, res){
+
+    Recipe.aggregate([
+        // {$match: {meal_time: }},
+        {$sample: {size: 10}}
+    ], function(err, recipes) {
+        console.log(recipes);
+        res.status(200).send(recipes);
+    });
+}
 
 function recipesByTag(req, res){}
 
 function recipesByName(req, res){}
 
 module.exports = {
-
     newRecipe,
     updateRecipe,
     deleteRecipe,
     randomRecipes,
     recipesByTag,
     recipesByName
-
 }
