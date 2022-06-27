@@ -34,7 +34,7 @@ function randomRecipes(req, res){
 
     Recipe.aggregate([
         // {$match: {meal_time: }},
-        {$sample: {size: 10}}
+        {$sample: {size: 30}}
     ], function(err, recipes) {
         console.log(recipes);
         res.status(200).send(recipes);

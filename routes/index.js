@@ -1,8 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const package = require('../package.json')
 const recipe = require('./recipes')
 const user = require('./users')
+const google_drive = require('../public/javascripts/google_drive')
 
 require('dotenv').config();
 
@@ -20,9 +20,10 @@ mongoose.connect(
       if (err) return console.error(err);
       console.log('Mongoose is connected');
   },
-); 
+);  
 
 indexRouter.get('/', function(req, res, next) {
+  google_drive.apply()
   res.render('index', { title: 'Cookit Server' });
 });
 
