@@ -14,8 +14,6 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
-
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+Hi you, if you found any vulnerabilities to report, please tell me
+at [this email](info.cookit.app@gmail.com) under the title "I REPORT VULNERABILITY"
+and then tell me about it, I'll be glad to hear 😊
