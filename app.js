@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const Router = require('./routes/index');
+const RateLimit = require('express-rate-limit');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(limiter);
 
 //routers
 app.use('/', Router.indexRouter);
@@ -25,6 +27,12 @@ app.use('/recipes', Router.recipeRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));
+});
+
+
+var limiter = new RateLimit({
+  windowMs: 1*60*1000, // 1 minute
+  max: 5
 });
 
 // error handler
