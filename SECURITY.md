@@ -15,5 +15,5 @@ currently being supported with security updates.
 ## Reporting a Vulnerability
 
 Hi you, if you found any vulnerabilities to report, please tell me
-at [this email](info.cookit.app@gmail.com) under the title "I REPORT VULNERABILITY"
+at info.cookit.app@gmail.com under the title "I REPORT VULNERABILITY"
 and then tell me about it, I'll be glad to hear 😊
