@@ -37,9 +37,14 @@ app.use(
   rateLimit({
     windowMs: 60 * 1000,
     max: 5,
-    message: "You exceeded 5 requests in 1 min limit!",
     headers: true,
+    handler: function (req, res, /*next*/) {
+      return res.status(429).json({
+        error: 'You sent too many requests. Please wait a while then try again'
+      })
+    }
   })
+ 
 );
 
 // error handler
