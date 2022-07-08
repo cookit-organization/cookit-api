@@ -65,7 +65,7 @@ function logInUser(req, res) {
 
    //should send encrypted with RSA 
 
-   User.findOne({'username': req.query.username}, (err, user) => {
+   User.findOne({'username': {$eq: req.query.username}}, (err, user) => {
 
     if(user.private_info.username == req.query.username && user.private_info.password == req.query.password){
         res.status(200).send(null)
