@@ -2,7 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const recipe = require('./recipes')
 const user = require('./users')
-const google_drive = require('../public/javascripts/google_drive')
+const google_drive = require('../public/javascripts/google-drive')
 
 require('dotenv').config();
 
@@ -23,9 +23,10 @@ mongoose.connect(
 );  
 
 indexRouter.get('/', function(req, res, next) {
-  google_drive.apply()
   res.render('index', { title: 'Cookit Server' });
 });
+
+// indexRouter.get('/test', google_drive.uploadImage);
 
 //users
 userRouter.post('/new-user', user.newUser)   // localhost:3000/users/new-user

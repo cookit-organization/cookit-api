@@ -1,39 +1,46 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
+const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const createError = require('http-errors');
 const Router = require('./routes/index');
-const RateLimit = require('express-rate-limit');
+const express = require('express');
+const logger = require('morgan');
+const path = require('path');
 
 const app = express();
+
+//security
+app.disable('x-powered-by')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(limiter);
+app.use(express.static(path.join(__dirname, 'public/images')));
 
 //routers
 app.use('/', Router.indexRouter);
 app.use('/users', Router.userRouter);
 app.use('/recipes', Router.recipeRouter);
 
-
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-
-var limiter = new RateLimit({
-  windowMs: 1*60*1000, // 1 minute
-  max: 5
-});
+//request limiter : needs a test
+app.use(
+  rateLimit({
+    windowMs: 60 * 1000,
+    max: 5,
+    message: "You exceeded 5 requests in 1 min limit!",
+    headers: true,
+  })
+);
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -41,8 +48,12 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  if(err.status === 404) {
+    res.render('404', {title: "404"});
+  }
+
   // render the error page
-  res.status(err.status || 500);
+  res.status(err.status || 500); 
   res.render('error', {title: "Error!"}, {error: err});
 });
 

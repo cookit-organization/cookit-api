@@ -1,7 +1,42 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: lightgrey;
+  background-image: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)), url(../images/background.jpg);
   color: black;
 }
 
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+.h80px {
+  font-size: 80px;
+}
+
+.h50px {
+  font-size: 50px;
+}
+
+.h30px {
+  font-size: 30px;
+}
+
+.logo {
+  margin-left: -30px;
+  margin-top: -30px;
+  border-radius: 60px;
+  border: 2px solid;
+  width: 70px;
+  height: 70px;
+}
+
+.divmid {
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+}
