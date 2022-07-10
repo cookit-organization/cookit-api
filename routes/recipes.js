@@ -4,7 +4,7 @@ const Recipe = require('../schemes/recipe')
 
 function newRecipe(req, res){
 
-    //RSA for username 
+    //RSA for author_username 
 
     new Recipe({
         author_username: req.query.author_username,
@@ -15,7 +15,7 @@ function newRecipe(req, res){
             image: null,
             tags: req.query.tags,
             meal_time: req.query.meal_time,
-            components: {'meat':'lol','shaha':'gjgj','meat':'lol','shaha':'gjgj','meat':'lol','shaha':'gjgj'},
+            components: req.query.components, 
             average_rate: 0,
             rates_number: 0
         }
@@ -36,10 +36,7 @@ function deleteRecipe(req, res){
         .then((recipe) => {
             res.status(200).send({message: "Recipe has been deleted successfully!"})
             console.log(recipe)
-        })
-        .catch((error)=>{
-            console.log(error.message)
-        })    
+        }).catch((error)=> console.log(error.message))    
 }
 
 //gets meal_time array and returns 30 recipes that has it
@@ -49,9 +46,7 @@ function randomRecipes(req, res){
         meal_time: { $all: req.query.meal_time }
     }).limit(30).then((recipes) => {
         res.status(200).send(recipes);
-    }).catch((err) => {
-        res.status(500).send(err)
-    })
+    }).catch((err) => res.status(500).send(err))
 }
 
 //gets tags and return list of 10 recipes that has this tags
@@ -61,12 +56,17 @@ function recipesByTag(req, res){
         tags: { $all: req.query.tags }
     }).limit(30).then((recipes) => {
         res.status(200).send(recipes);
-    }).catch((err) => {
-        res.status(500).send(err)
-    })
+    }).catch((err) => res.status(500).send(err))
 }
 
-function recipesByName(req, res){}
+function recipesByName(req, res){
+
+    db.collection('recipes').find({ 
+        name: req.query.name
+    }).limit(30).then((recipes) => {
+        res.status(200).send(recipes);
+    }).catch((err) => res.status(500).send(err))
+}
 
 module.exports = {
     newRecipe,

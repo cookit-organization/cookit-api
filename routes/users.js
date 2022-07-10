@@ -1,7 +1,6 @@
 const User = require('../schemes/user')
 const rsa = require('../cryptography/rsa')
 
-
 function newUser(req, res) {
 
     //decrypt username, password  and email with RSA 
@@ -46,7 +45,17 @@ function newUser(req, res) {
 
 function updateUser(req, res) {}
 
-function deleteUser(req, res) {}
+function deleteUser(req, res) {
+
+    User.findOneAndDelete(req.body.id)
+        .then((user) => {
+            res.status(200).send({message: "user has been deleted successfully!"})
+            console.log(user)
+        })
+        .catch((error)=>{
+            console.log(error.message)
+        })    
+}
 
 function getUsers(req, res) {
 
@@ -54,12 +63,17 @@ function getUsers(req, res) {
     .then((result) => {
         res.status(200).send(result)
         console.log(result)
-    })
-    .catch((error) => console.log(error))
-
+    }).catch((error) => console.log(error))
 }
 
-function getUserByUsername(req, res) {}
+function getUserByUsername(req, res) {
+
+    User.findOne({username: req.query.username})
+    .then((user) => {
+        res.status(200).send(user)
+        console.log(user)
+    }).catch((error) => console.log(error))
+}
 
 function logInUser(req, res) {
 
