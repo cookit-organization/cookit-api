@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
+const path = require('path');
 
-module.exports = mongoose.model("User", mongoose.Schema({
+var userScheme = mongoose.Schema({
     profile: {
         name: String,
-        // image: String,
+        image: String,
         bio: String,
         rate: Number
     },
@@ -17,4 +18,16 @@ module.exports = mongoose.model("User", mongoose.Schema({
         saved: Array,
         favorite: Array,
     }
-}), "users") 
+})
+
+//later change to link in google drive where the image will be stored
+userScheme.virtual('ProfileImage').get(function() {
+    var image = userScheme.profile.image;
+    if (image != null && image != "") {
+        return image;
+    } else {
+        return path.join('/images', 'default_profile_picture.jpg');
+    }
+});
+
+module.exports = mongoose.model("User", userScheme, "users");

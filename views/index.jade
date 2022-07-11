@@ -1,6 +1,38 @@
 extends layout
 
 block content
-  .noselect
+  .noselect.textincenter
     h1.h30px= title
-    p Welcome to #{title}
+    p Welcome to #{title}.
+
+  .divmid.noselect 
+    .textincenter
+      h5 USERS
+        br
+        a(href="/users/new-user") new-user (POST)
+        br
+        a(href="/users/update-user") update-user (PUT)
+        br
+        a(href="/users/delete-user") delete-user (DELETE)
+        br
+        a(href="/users/get-users") get-users (GET)
+        br
+        a(href="/users/get-user") get-user (GET)
+        br
+        a(href="/users/log-in-user") log-in-user (POST)  
+      h5 RECIPES
+        br
+        a(href="/recipes/new-recipe") new-recipe (POST)
+        br
+        a(href="/recipes/update-recipe") update-recipe (PUT)
+        br
+        a(href="/recipes/delete-recipe") delete-recipe (DELETE)
+        br
+        a(href="/recipes/random-recipes") random-recipes (GET)
+        br
+        a(href="/recipes/recipes-by-tag") recipes-by-tag (GET)
+        br
+        a(href="/recipes/recipe-by-name") recipe-by-name (GET)         
+
+      p we need to send parameters this page isn't completely finished  
+    

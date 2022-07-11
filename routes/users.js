@@ -18,15 +18,15 @@ function newUser(req, res) {
 
         new User({
             profile: {
-                name: {$eq: req.query.name},
+                name: sanitize(req.query.name),
                 //image: req.query.image, // check how to implement this functionality
-                bio: {$eq: req.query.bio},
+                bio: sanitize(req.query.bio),
                 rate: 0
             },
             private_info: {
-                email: {$eq: email},
-                username: {$eq: username},
-                password: {$eq: password}
+                email:  sanitize(email),
+                username: sanitize(username),
+                password: sanitize(password)
             },
             recipes: {
                 his: [], 

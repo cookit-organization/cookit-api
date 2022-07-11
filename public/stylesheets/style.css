@@ -3,6 +3,7 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-image: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)), url(../images/background.jpg);
   color: black;
+  font-family: 'Edu VIC WA NT Beginner', cursive;
 }
 
 .noselect {
@@ -12,6 +13,17 @@ body {
        -moz-user-select: none; /* Old versions of Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+.divmid {
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+}
+
+.textincenter {
+  width: fit-content;
+  text-align: center;
 }
 
 .h80px {
@@ -27,16 +39,10 @@ body {
 }
 
 .logo {
-  margin-left: -30px;
+  margin-left: -5px;
   margin-top: -30px;
   border-radius: 60px;
-  border: 2px solid;
+  border: 2px solid rgb(116, 93, 1);
   width: 70px;
   height: 70px;
-}
-
-.divmid {
-  display: flex;
-  justify-content: center;
-  padding: 50px;
 }
