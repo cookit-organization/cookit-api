@@ -16,15 +16,15 @@ function newUser(req, res) {
 
         new User({
             profile: {
-                name: req.query.name,
+                name: {$eq: req.query.name},
                 //image: req.query.image, // check how to implement this functionality
-                bio: req.query.bio,
+                bio: {$eq: req.query.bio},
                 rate: 0
             },
             private_info: {
-                email: email,
-                username: username,
-                password: password
+                email: {$eq: email},
+                username: {$eq: username},
+                password: {$eq: password}
             },
             recipes: {
                 his: [], 
@@ -46,8 +46,8 @@ function newUser(req, res) {
 function updateUser(req, res) {}
 
 function deleteUser(req, res) {
-
-    User.findOneAndDelete(req.body.id)
+    
+    User.findOneAndDelete({$eq: req.body.id})
         .then((user) => {
             res.status(200).send({message: "user has been deleted successfully!"})
             console.log(user)
@@ -67,8 +67,8 @@ function getUsers(req, res) {
 }
 
 function getUserByUsername(req, res) {
-
-    User.findOne({username: req.query.username})
+    
+    User.findOne({username: {$eq: req.query.username}})
     .then((user) => {
         res.status(200).send(user)
         console.log(user)
@@ -79,7 +79,7 @@ function logInUser(req, res) {
 
    //should send encrypted with RSA 
 
-   User.findOne({'username': {$eq: req.query.username}}, (err, user) => {
+   User.findOne({username: {$eq: req.query.username}}, (err, user) => {
 
     if(user.private_info.username == req.query.username && user.private_info.password == req.query.password){
         res.status(200).send(null)
