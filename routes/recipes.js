@@ -1,6 +1,8 @@
-const mongoose = require('mongoose')
-const { db } = require('../schemes/recipe')
-const Recipe = require('../schemes/recipe')
+const mongoose = require('mongoose');
+const { db } = require('../schemes/recipe');
+const Recipe = require('../schemes/recipe');
+
+const sanitize = require('mongo-sanitize');
 
 function newRecipe(req, res){
 
@@ -32,7 +34,7 @@ function updateRecipe(req, res){}
 // gets id parameter
 function deleteRecipe(req, res){
 
-    Task.findOneAndDelete(req.body.id)
+    Task.findOneAndDelete(sanitize(req.body.id))
         .then((recipe) => {
             res.status(200).send({message: "Recipe has been deleted successfully!"})
             console.log(recipe)

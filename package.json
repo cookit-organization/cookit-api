@@ -15,6 +15,7 @@
         "googleapis": "^104.0.0",
         "http-errors": "~1.6.3",
         "jade": "^0.29.0",
+        "mongo-sanitize": "^1.1.0",
         "morgan": "~1.9.1"
     }
 }

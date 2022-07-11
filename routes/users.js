@@ -1,6 +1,8 @@
 const User = require('../schemes/user')
 const rsa = require('../cryptography/rsa')
 
+const sanitize = require('mongo-sanitize');
+
 function newUser(req, res) {
 
     //decrypt username, password  and email with RSA 
@@ -47,7 +49,7 @@ function updateUser(req, res) {}
 
 function deleteUser(req, res) {
     
-    User.findOneAndDelete(req.body.id)
+    User.findOneAndDelete(sanitize(req.body.id))
         .then((user) => {
             res.status(200).send({message: "user has been deleted successfully!"})
             console.log(user)
@@ -68,7 +70,7 @@ function getUsers(req, res) {
 
 function getUserByUsername(req, res) {
     
-    User.findOne({username: {$eq: req.query.username}})
+    User.findOne({username: sanitize(req.query.username)})
     .then((user) => {
         res.status(200).send(user)
         console.log(user)
@@ -79,9 +81,12 @@ function logInUser(req, res) {
 
    //should send encrypted with RSA 
 
-   User.findOne({username: {$eq: req.query.username}}, (err, user) => {
+   var username = sanitize(req.query.username);
+   var password = sanitize(req.query.password);
 
-    if(user.private_info.username == req.query.username && user.private_info.password == req.query.password){
+   User.findOne({username: username}, (err, user) => {
+
+    if(user.private_info.username == username && user.private_info.password == password){
         res.status(200).send(null)
         console.log(user)
     }else{
