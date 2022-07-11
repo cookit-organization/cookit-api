@@ -47,7 +47,7 @@ function updateUser(req, res) {}
 
 function deleteUser(req, res) {
     
-    User.findOneAndDelete({$eq: req.body.id})
+    User.findOneAndDelete(req.body.id)
         .then((user) => {
             res.status(200).send({message: "user has been deleted successfully!"})
             console.log(user)
