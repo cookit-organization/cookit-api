@@ -8,14 +8,14 @@ function uploadImage(folderId, image) {
     // folderId by default is recipeImages
     if (folderId === null || folderId === undefined) 
       folderId = [recipeImages]
-    
-  
+     
     drive.then(drive => {
       const response = drive.files.create({
         requestBody: {
           name: 'recipe_image.jpg',
           mimeType: 'image/jpg',
-          parents: folderId
+          parents: folderId,
+          files: 'files(id, thumbnailLink)'
         },
         media: {
           mimeType: 'image/jpg',
@@ -24,11 +24,10 @@ function uploadImage(folderId, image) {
       });
   
       response.then(function (res) {
-       console.log(res.data);
-      }).catch((err) =>  {
-        console.log(err);
-      })     
-    });
+        console.log(res.data);
+
+      }).catch((err) =>  console.log(err));    
+    }).catch((err) =>  console.log(err));
   }
 
 function deleteImage(imageId) {
@@ -40,29 +39,20 @@ function deleteImage(imageId) {
   
       response.then((res) => {
         console.log(res.data)
-      }).catch((err) => {
-        console.error(err)
-      })
-    }) 
+      }).catch((err) => console.error(err));
+    }).catch((err) => console.log(err));
 }
 
-function getImage(imageId) {
+async function getImage(imageId) {
 
-  drive.then(drive => {
-
-      drive.files.get({
+  var request = await drive;
+  var response = await request.files.get({
         fileId: imageId,
+        files: 'files(id, thumbnailLink)',
         alt: 'media',
-      })
-      .then(image => {
-        photo = image;
-        console.log(image.data.webContentLink);
-        console.log(image.data.webViewLink);
+      });
 
-        return image;
-          
-      }).catch(err => console.log(err));
-  });
+  return response;    
 }
 
 module.exports = {

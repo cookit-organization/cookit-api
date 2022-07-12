@@ -35,8 +35,13 @@ indexRouter.get('/upload', function (req, res, next) {
 // indexRouter.get('/delete', deleteImage(/* imageId */));
 
 indexRouter.get('/get', function (req, res, next) {
-  var image = driveActions.getImage("1HxK7sIfLQoirv1NTgd4VL20XyyRH2Pzu")
-  res.render('show-image', {title: "image", image: "https://drive.google.com/file/d/1HxK7sIfLQoirv1NTgd4VL20XyyRH2Pzu/view"})
+  var image = driveActions.getImage("1OL60al05Lmh0s8QT2zRFNCUorGN69An8")
+  image.then(response => {
+    console.log(response.data.thumbnailLink) // why this is undefined
+    // console.log(response.data.webContentLink)
+    // console.log(response.data.webViewLink)
+    res.render('show-image', {title: "image", image: image.data.thumbnailLink})
+  })
 })
 
 //users
