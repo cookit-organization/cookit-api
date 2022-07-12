@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const { db } = require('../../schemes/recipe')
 const Recipe = require('../schemes/recipe')
 
 //returns the average_rate (remember to add 1 to rates_number)
@@ -8,6 +7,5 @@ function addVote(average_rate, rate, rates_number) {
 }
 
 module.exports = {
-    addVote,
-
+    addVote
 }

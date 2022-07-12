@@ -1,7 +1,4 @@
-const mongoose = require('mongoose');
-const { db } = require('../schemes/recipe');
 const Recipe = require('../schemes/recipe');
-
 const sanitize = require('mongo-sanitize');
 
 function newRecipe(req, res){
@@ -9,17 +6,19 @@ function newRecipe(req, res){
     //RSA for author_username 
 
     new Recipe({
-        author_username: req.query.author_username,
+        author_name: sanitize(req.body.author_name),
+        author_username: sanitize(req.query.author_username),
         recipe: {
-            name: req.query.name,
-            preparation_time: req.query.preparation_time,
-            description: req.query.description,
+            name: sanitize(req.query.name),
+            preparation_time: sanitize(req.query.preparation_time),
+            description: sanitize(req.query.description),
             image: null,
-            tags: req.query.tags,
-            meal_time: req.query.meal_time,
-            components: req.query.components, 
+            tags: sanitize(req.query.tags),
+            meal_time: sanitize(req.query.meal_time),
+            components: sanitize(req.query.components), 
             average_rate: 0,
-            rates_number: 0
+            rates_number: 0,
+            users_who_vote: null
         }
     }).save()
     .then((result) => {
@@ -34,7 +33,7 @@ function updateRecipe(req, res){}
 // gets id parameter
 function deleteRecipe(req, res){
 
-    Task.findOneAndDelete(sanitize(req.body.id))
+    Recipe.findOneAndDelete(sanitize(req.body.id))
         .then((recipe) => {
             res.status(200).send({message: "Recipe has been deleted successfully!"})
             console.log(recipe)
@@ -55,7 +54,7 @@ function randomRecipes(req, res){
 function recipesByTag(req, res){
     
     Recipe.find({
-        tags: req.query.tags 
+        tags: sanitize(req.query.tags) 
     }).limit(20).then((recipes) => {
         res.status(200).send(recipes);
     }).catch((err) => res.status(500).send(err))
@@ -63,8 +62,8 @@ function recipesByTag(req, res){
 
 function recipesByName(req, res){
 
-    db.collection('recipes').find({ 
-        name: req.query.name
+    Recipe.find({ 
+        name: sanitize(req.query.name)
     }).limit(20).then((recipes) => {
         res.status(200).send(recipes);
     }).catch((err) => res.status(500).send(err))

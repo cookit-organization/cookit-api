@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 
 module.exports =  mongoose.model("Recipe", mongoose.Schema({
-    author_username: String,
+    author_name: String,
+    author_username: String, // RSA it
     recipe: {
         name: String,
         preparation_time: String,

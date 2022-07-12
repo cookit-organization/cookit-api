@@ -13,6 +13,7 @@
         "express-rate-limit": "^6.4.0",
         "google-auth-library": "^8.1.0",
         "googleapis": "^104.0.0",
+        "helmet": "^5.1.0",
         "http-errors": "~1.6.3",
         "jade": "^0.29.0",
         "mongo-sanitize": "^1.1.0",

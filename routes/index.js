@@ -2,8 +2,10 @@ const express = require('express')
 const mongoose = require('mongoose')
 const recipe = require('./recipes')
 const user = require('./users')
-const google_drive = require('../public/javascripts/google-drive')
-const { default: rateLimit } = require('express-rate-limit')
+const uploadImage = require('../public/javascripts/upload-image')
+const deleteImage = require('../public/javascripts/delete-image')
+const path = require('path');
+const fs = require('fs');
 
 require('dotenv').config();
 
@@ -27,7 +29,9 @@ indexRouter.get('/', function(req, res, next) {
   res.render('index', { title: 'Cookit Server' });
 });
 
-// indexRouter.get('/test', google_drive.uploadImage);
+//testing 
+indexRouter.get('/upload', uploadImage('1mlqujDjrQktgYRvSXt8IGy1Kh4Hi66wg', fs.createReadStream(path.join(__dirname, '../images/background.jpg'))));
+indexRouter.get('/delete', deleteImage(/* imageId */));
 
 //users
 userRouter.post('/new-user', user.newUser)   // localhost:3000/users/new-user

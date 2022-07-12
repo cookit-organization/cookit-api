@@ -59,6 +59,7 @@ function deleteUser(req, res) {
         })    
 }
 
+//admin only
 function getUsers(req, res) {
 
     User.find()
