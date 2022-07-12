@@ -2,8 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const recipe = require('./recipes')
 const user = require('./users')
-const uploadImage = require('../public/javascripts/upload-image')
-const deleteImage = require('../public/javascripts/delete-image')
+const driveActions = require('../public/javascripts/google-drive-actions')
 const path = require('path');
 const fs = require('fs');
 
@@ -30,8 +29,15 @@ indexRouter.get('/', function(req, res, next) {
 });
 
 //testing 
-indexRouter.get('/upload', uploadImage('1mlqujDjrQktgYRvSXt8IGy1Kh4Hi66wg', fs.createReadStream(path.join(__dirname, '../images/background.jpg'))));
-indexRouter.get('/delete', deleteImage(/* imageId */));
+indexRouter.get('/upload', function (req, res, next) {
+  driveActions.uploadImage(['1mlqujDjrQktgYRvSXt8IGy1Kh4Hi66wg'], fs.createReadStream(path.join(__dirname, '../public/images/cookit_logo.jpg')))
+});
+// indexRouter.get('/delete', deleteImage(/* imageId */));
+
+indexRouter.get('/get', function (req, res, next) {
+  var image = driveActions.getImage("1HxK7sIfLQoirv1NTgd4VL20XyyRH2Pzu")
+  res.render('show-image', {title: "image", image: "https://drive.google.com/file/d/1HxK7sIfLQoirv1NTgd4VL20XyyRH2Pzu/view"})
+})
 
 //users
 userRouter.post('/new-user', user.newUser)   // localhost:3000/users/new-user
