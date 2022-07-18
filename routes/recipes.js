@@ -1,18 +1,29 @@
 const Recipe = require('../schemes/recipe');
 const sanitize = require('mongo-sanitize');
+const driveActions = require('../public/javascripts/google-drive-actions');
+
+const recipeImages = '1mlqujDjrQktgYRvSXt8IGy1Kh4Hi66wg';
 
 function newRecipe(req, res){
 
-    //RSA for author_username 
+    /* RSA for author_username */
 
     new Recipe({
-        author_name: sanitize(req.body.author_name),
+        author_name: sanitize(req.query.author_name),
         author_username: sanitize(req.query.author_username),
         recipe: {
             name: sanitize(req.query.name),
             preparation_time: sanitize(req.query.preparation_time),
             description: sanitize(req.query.description),
-            image: null,
+            image: async () => {
+                
+                var request = driveActions.uploadImage(recipeImages, /* image */ req.query.image)
+                var imageId = null;
+                request.then(response => {
+                    imageId = response.data['id'] /* this is image id */
+                }).catch(err => console.log(err))
+                return imageId;
+            },
             tags: sanitize(req.query.tags),
             meal_time: sanitize(req.query.meal_time),
             components: sanitize(req.query.components), 
@@ -22,10 +33,10 @@ function newRecipe(req, res){
         }
     }).save()
     .then((result) => {
-        console.log("response :\n" + result)
+        console.log("Response :\n" + result)
         res.status(200).send(null)
     })
-    .catch((error) => console.log("error : " + error))
+    .catch((error) => console.log("Error : " + error))
 }
 
 function updateRecipe(req, res){}

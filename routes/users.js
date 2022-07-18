@@ -1,25 +1,31 @@
-const User = require('../schemes/user')
-const rsa = require('../cryptography/rsa')
-
+const User = require('../schemes/user');
+const rsa = require('../cryptography/rsa');
 const sanitize = require('mongo-sanitize');
+const driveActions = require('../public/javascripts/google-drive-actions');
 
-function newUser(req, res) {
+const profileImages = '1Nuy5s8VBBlKMZC2DvB9Xq6B3jU1WN8oQ';
 
-    //decrypt username, password  and email with RSA 
+
+function newUser(req, res) {    
     
-    try{
-        // let username = rsa.decrypt(req.query.username)
-        // let password = rsa.decrypt(req.query.password)
-        // let email = rsa.decrypt(req.query.email)
+        /* 
+        decrypt username, password and email with RSA 
+        var username = rsa.decrypt(req.query.username)
+        var password = rsa.decrypt(req.query.password)
+        var email = rsa.decrypt(req.query.email) 
+        */
 
-        let username = req.query.username
-        let password = req.query.password
-        let email = req.query.email
+        var username = req.query.username
+        var password = req.query.password
+        var email = req.query.email
 
+        var uploadImage = driveActions.uploadImage(profileImages, /* the image */ req.query.image);
+        
+        uploadImage.then(resImage => {
         new User({
             profile: {
                 name: sanitize(req.query.name),
-                //image: req.query.image, // check how to implement this functionality
+                image: resImage.data['id'] /* this is image id */, 
                 bio: sanitize(req.query.bio),
                 rate: 0
             },
@@ -37,12 +43,9 @@ function newUser(req, res) {
         .then((result) => {
             console.log("response :\n" + result)
             res.status(200).send(null)
-        })
-        .catch((error) => console.log("error : " + error))
-    }catch{
-        console.error("[ERROR]: RSA did not decrypt")
-        res.status(403).json({error:"RSA did not decrypt"})
-    }
+
+        }).catch(err => console.log(err))
+    }).catch((err) => console.log(err))
 }
 
 function updateUser(req, res) {}
