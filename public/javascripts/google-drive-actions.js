@@ -1,4 +1,6 @@
 const drive = require('./google-drive');
+const path = require('path');
+const fs = require('fs')
 
 async function uploadImage(folderId, image) {
 
@@ -13,9 +15,11 @@ async function uploadImage(folderId, image) {
       },
       media: {
         mimeType: 'image/jpg',
-        body: image, // for test fs.createReadStream(path.join(__dirname, '../images/background.jpg'))
+        body: fs.createReadStream(path.join(__dirname, '../images/tmp/' + image))
       },
   });   
+  
+  response.then(_ => fs.rmSync(path.join(__dirname, '../images/tmp/' + image)))
 
   return response;
 }

@@ -17,6 +17,7 @@ var userScheme = mongoose.Schema({
         his: Array,
         saved: Array,
         favorite: Array,
+        recent_visited: Array
     }
 })
 

@@ -7,7 +7,7 @@ module.exports =  mongoose.model("Recipe", mongoose.Schema({
         name: String,
         preparation_time: String,
         description: String,
-        image: Buffer,
+        image: String,
         tags: Array,
         meal_time: Array,
         components: Array,

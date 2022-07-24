@@ -18,6 +18,8 @@ function newUser(req, res) {
         var username = req.query.username
         var password = req.query.password
         var email = req.query.email
+        
+        //if image is null user did not uploaded an image therefore you need to give default image.
 
         var uploadImage = driveActions.uploadImage(profileImages, /* the image */ req.query.image);
         
@@ -26,7 +28,7 @@ function newUser(req, res) {
             profile: {
                 name: sanitize(req.query.name),
                 image: resImage.data['id'] /* this is image id */, 
-                bio: sanitize(req.query.bio),
+                bio: "",
                 rate: 0
             },
             private_info: {

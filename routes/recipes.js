@@ -4,39 +4,37 @@ const driveActions = require('../public/javascripts/google-drive-actions');
 
 const recipeImages = '1mlqujDjrQktgYRvSXt8IGy1Kh4Hi66wg';
 
-function newRecipe(req, res){
+function newRecipe(req, res, imageName){
 
     /* RSA for author_username */
 
-    new Recipe({
-        author_name: sanitize(req.query.author_name),
-        author_username: sanitize(req.query.author_username),
-        recipe: {
-            name: sanitize(req.query.name),
-            preparation_time: sanitize(req.query.preparation_time),
-            description: sanitize(req.query.description),
-            image: async () => {
-                
-                var request = driveActions.uploadImage(recipeImages, /* image */ req.query.image)
-                var imageId = null;
-                request.then(response => {
-                    imageId = response.data['id'] /* this is image id */
-                }).catch(err => console.log(err))
-                return imageId;
-            },
-            tags: sanitize(req.query.tags),
-            meal_time: sanitize(req.query.meal_time),
-            components: sanitize(req.query.components), 
-            average_rate: 0,
-            rates_number: 0,
-            users_who_vote: null
-        }
-    }).save()
-    .then((result) => {
-        console.log("Response :\n" + result)
-        res.status(200).send(null)
-    })
-    .catch((error) => console.log("Error : " + error))
+    const request = driveActions.uploadImage(recipeImages, imageName);
+
+    request.then(response => {
+
+        new Recipe({
+            author_name: sanitize(req.query.author_name),
+            author_username: sanitize(req.query.author_username),
+            recipe: {
+                name: sanitize(req.query.name),
+                preparation_time: sanitize(req.query.preparation_time),
+                description: sanitize(req.query.description),
+                image: response.data['id'], /* this is image id */
+                tags: sanitize(req.query.tags),
+                meal_time: sanitize(req.query.meal_time),
+                components: sanitize(req.query.components), 
+                average_rate: 0,
+                rates_number: 0,
+                users_who_vote: null
+            }
+        }).save()
+        .then((result) => {
+            console.log("Response :\n" + result)
+            res.status(200).send(null)
+        })
+        .catch((error) => console.log(error))
+    }).catch(err => console.log(err));
+    
 }
 
 function updateRecipe(req, res){}
@@ -56,7 +54,7 @@ function randomRecipes(req, res){
 
     Recipe.find({
         meal_time: { $match: req.query.meal_time }
-    }).limit(3).then((recipes) => {
+    }).limit(20).then((recipes) => {
         res.status(200).send(recipes);
     }).catch((err) => res.status(500).send(err))
 }
@@ -74,8 +72,8 @@ function recipesByTag(req, res){
 function recipesByName(req, res){
 
     Recipe.find({ 
-        name: sanitize(req.query.name)
-    }).limit(20).then((recipes) => {
+        $match:{name: sanitize(req.query.name)}
+    }).limit(3).then((recipes) => {
         res.status(200).send(recipes);
     }).catch((err) => res.status(500).send(err))
 }
