@@ -1,5 +1,4 @@
 const User = require('../schemes/user');
-const rsa = require('../cryptography/rsa');
 const sanitize = require('mongo-sanitize');
 const driveActions = require('../public/javascripts/google-drive-actions');
 

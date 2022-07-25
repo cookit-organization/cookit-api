@@ -3,23 +3,21 @@ const path = require('path');
 const fs = require('fs')
 
 async function uploadImage(folderId, image) {
-
-  /* folderId by default is recipeImages */
      
   var request = await drive;  
   var response = request.files.create({
       requestBody: {
-        name: 'image.jpg',
-        mimeType: 'image/jpg',
+        name: 'image',
+        mimeType: 'image/*',
         parents: [folderId]
       },
       media: {
-        mimeType: 'image/jpg',
-        body: fs.createReadStream(path.join(__dirname, '../images/tmp/' + image))
+        mimeType: 'image/*',
+        body: image.buffer //fs.createReadStream(path.join(__dirname, '../images/tmp/' + image))
       },
   });   
   
-  response.then(_ => fs.rmSync(path.join(__dirname, '../images/tmp/' + image)))
+  // response.then(_ => fs.rmSync(path.join(__dirname, '../images/tmp/' + image)))
 
   return response;
 }

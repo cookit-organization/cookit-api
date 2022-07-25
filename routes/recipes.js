@@ -1,14 +1,14 @@
 const Recipe = require('../schemes/recipe');
 const sanitize = require('mongo-sanitize');
 const driveActions = require('../public/javascripts/google-drive-actions');
+const multer  = require('multer')
 
 const recipeImages = '1mlqujDjrQktgYRvSXt8IGy1Kh4Hi66wg';
 
-function newRecipe(req, res, imageName){
-
+function newRecipe(req, res, image){
     /* RSA for author_username */
-
-    const request = driveActions.uploadImage(recipeImages, imageName);
+  
+    const request = driveActions.uploadImage(recipeImages, image);
 
     request.then(response => {
 
@@ -29,7 +29,7 @@ function newRecipe(req, res, imageName){
             }
         }).save()
         .then((result) => {
-            console.log("Response :\n" + result)
+            console.log(result)
             res.status(200).send(null)
         })
         .catch((error) => console.log(error))
@@ -43,37 +43,57 @@ function updateRecipe(req, res){}
 function deleteRecipe(req, res){
 
     Recipe.findOneAndDelete(sanitize(req.body.id))
-        .then((recipe) => {
+        .then(() => {
             res.status(200).send({message: "Recipe has been deleted successfully!"})
-            console.log(recipe)
         }).catch((error)=> console.log(error.message))    
 }
 
-//gets meal_time array and returns 30 recipes that has it
-function randomRecipes(req, res){
-
+function recipesByDayState(req, res){
+    var currentTime = "";
+    const date = new Date().getHours()
+    date < 12 ? currentTime = 'morning' : date < 18 ? currentTime = 'afternoon' : currentTime = 'night'
+    
     Recipe.find({
-        meal_time: { $match: req.query.meal_time }
-    }).limit(20).then((recipes) => {
+        "recipe.meal_time": { "$in": currentTime } 
+    })
+    .limit(20)
+    .sort({"recipe.average_rate" : -1})
+    .then((recipes) => {
         res.status(200).send(recipes);
     }).catch((err) => res.status(500).send(err))
 }
 
-//gets tags and return list of 20 recipes that has this tags
 function recipesByTag(req, res){
     
+    var food = sanitize(req.query.food);
+    var meal_time = sanitize(req.query.meal_time);
+
+    const arrayFood = food.replace(/\s/g, '').split(',');
+    const arrayMeal_time = meal_time.replace(/\s/g, '').split(',');
+    
+    console.log(arrayFood)
+    console.log(arrayMeal_time)
+
     Recipe.find({
-        tags: sanitize(req.query.tags) 
-    }).limit(20).then((recipes) => {
+        $or: [
+            { "recipe.tags": { "$in": arrayFood }},
+            { "recipe.meal_time": { "$in": arrayMeal_time }}
+        ]
+    })
+    .limit(20)
+    .sort({"recipe.average_rate" : -1})
+    .then((recipes) => {
         res.status(200).send(recipes);
+        console.log(recipes);
     }).catch((err) => res.status(500).send(err))
 }
 
 function recipesByName(req, res){
-
-    Recipe.find({ 
-        $match:{name: sanitize(req.query.name)}
-    }).limit(3).then((recipes) => {
+    Recipe.find({
+        "recipe.name": { '$regex' : sanitize(req.query.search), '$options' : 'i' }
+    })
+    .limit(20)
+    .then((recipes) => {
         res.status(200).send(recipes);
     }).catch((err) => res.status(500).send(err))
 }
@@ -82,7 +102,7 @@ module.exports = {
     newRecipe,
     updateRecipe,
     deleteRecipe,
-    randomRecipes,
+    recipesByDayState,
     recipesByTag,
     recipesByName
 }
