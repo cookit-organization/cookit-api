@@ -70,9 +70,6 @@ function recipesByTag(req, res){
 
     const arrayFood = food.replace(/\s/g, '').split(',');
     const arrayMeal_time = meal_time.replace(/\s/g, '').split(',');
-    
-    console.log(arrayFood)
-    console.log(arrayMeal_time)
 
     Recipe.find({
         $or: [

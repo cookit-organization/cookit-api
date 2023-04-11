@@ -35,24 +35,26 @@ indexRouter.get('/', function(req, res, next) {
   res.render('index', { title: 'Cookit Server' });
 });
 
+
+indexRouter.post('/login', user.logInUser)
+
 //users
-userRouter.post('/new-user', user.newUser)
-userRouter.put('/update-user', user.updateUser)
-userRouter.delete('/delete-user', user.deleteUser)
+userRouter.post('/', user.newUser)
+userRouter.put('/', user.updateUser)
+userRouter.delete('/', user.deleteUser)
+userRouter.get('/', user.getUserByUsername)
 userRouter.get('/get-users', user.getUsers) // for admin only
-userRouter.get('/get-user', user.getUserByUsername)
-userRouter.post('/log-in-user', user.logInUser)
 
 //recipes
 
-recipeRouter.post('/new-recipe', upload.single('image'), (req, res) => {
+recipeRouter.post('/', upload.single('image'), (req, res) => {
   recipe.newRecipe(req, res, req.file);
 })
-recipeRouter.put('/update-recipe', recipe.updateRecipe)
-recipeRouter.delete('/delete-recipe', recipe.deleteRecipe)
+recipeRouter.put('/', recipe.updateRecipe)
+recipeRouter.delete('/', recipe.deleteRecipe)
 recipeRouter.get('/random-recipes', recipe.recipesByDayState)
-recipeRouter.get('/recipes-by-tag', recipe.recipesByTag)
-recipeRouter.get('/recipe-by-name', recipe.recipesByName)
+recipeRouter.get('/by-tag', recipe.recipesByTag)
+recipeRouter.get('/by-name', recipe.recipesByName)
 
 module.exports = {
   indexRouter,
