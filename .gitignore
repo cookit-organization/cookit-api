@@ -1,2 +1,4 @@
 .env
 google-drive-srevice
+/node_modules
+/.vscode
