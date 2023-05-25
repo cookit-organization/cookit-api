@@ -10,11 +10,9 @@ const path = require('path');
 
 const app = express();
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// server setup
 app.use(helmet());
 app.use(logger('dev'));
 app.use(express.json());
@@ -25,13 +23,10 @@ app.use(express.static(path.join(__dirname, 'public/images')));
 app.use(favicon(__dirname + '/public/images/cookit_logo.jpg'));
 
 
-// routers
 app.use('/', Router.indexRouter);
 app.use('/users', Router.userRouter);
 app.use('/recipes', Router.recipeRouter);
 
-
-// request limiter : needs a test
 app.use(
   rateLimit ({
   windowMs: 60 * 1000,
@@ -47,10 +42,9 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
+
 app.use(function(err, req, res, next) {
 
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
